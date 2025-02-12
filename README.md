@@ -50,7 +50,7 @@ Antes de iniciar o programa, você vai precisar instalar na sua máquina as segu
 Para clonar este repositório, você deve ter o Git instalado e, em seguida, usar o comando abaixo no terminal do VSCode:
 
 ```bash
-$ git clone https://github.com/Lana-Ramos/PWM-EmbarcaTech
+$ git clone https://github.com/Lana-Ramos/PWM-EmbarcaTech.git
 ```
 
 Acesse a pasta do projeto:
