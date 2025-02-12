@@ -1,25 +1,36 @@
 #include <stdio.h> 
 #include "pico/stdlib.h" 
-#include "hardware/pwm.h" //biblioteca para controlar o hardware de PWM
+#include "hardware/pwm.h" // biblioteca para controlar o hardware de PWM
 
-#define PWM_LED 12 //pino do LED conectado a GPIO como PWM
-const uint16_t WRAP_PERIOD = 4000; //valor máximo do contador - WRAP
-const float PWM_DIVISER = 4.0; //divisor do clock para o PWM
-const uint16_t LED_STEP = 200; //passo de incremento/decremento para o duty cycle do LED
-uint16_t led_level = 200; //nível inicial do pwm (duty cycle)
+#define MOTOR 22 
+#define LED 12
 
-//função para configurar o módulo PWM
+#define FREQUENCIA  50 // frequência do PWM
+#define DIVISER  125 // divisor do clock para o PWM
+#define DC_SUAVE  5 //  ciclo ativo de ±5µs
+#define DELAY 10    // atraso de ajuste
+
+// ciclo de servomotor
+uint16_t dc_0 = 500; // 0°
+uint16_t dc_90 = 1470;  // 90°
+uint16_t dc_180 = 2400;  // 180°
+
+const uint16_t WRAP = 20000; // periodo/wrap
+uint slice;
+
+
+//função que configura o módulo PWM
 void pwm_setup()
 {
-    gpio_set_function(PWM_LED, GPIO_FUNC_PWM); //habilitar o pino GPIO como PWM
+    gpio_set_function(LED, GPIO_FUNC_PWM); //habilitar o pino GPIO como PWM
 
-    uint slice = pwm_gpio_to_slice_num(PWM_LED); //obter o canal PWM da GPIO
+    uint slice = pwm_gpio_to_slice_num(LED); //obter o canal PWM da GPIO
 
-    pwm_set_clkdiv(slice, PWM_DIVISER); //define o divisor de clock do PWM
+    pwm_set_clkdiv(slice, DIVISER); //define o divisor de clock do PWM
 
-    pwm_set_wrap(slice, WRAP_PERIOD); //definir o valor de wrap
+    pwm_set_wrap(slice, WRAP); //definir o valor de wrap
 
-    pwm_set_gpio_level(PWM_LED, 100); //definir o cico de trabalho (duty cycle) do pwm
+    pwm_set_gpio_level(LED, 100); //definir o cico de trabalho (duty cycle) do pwm
 
     pwm_set_enabled(slice, true); //habilita o pwm no slice correspondente
 }
@@ -39,14 +50,14 @@ int main()
 
         printf("Ciclo ativo:%d\n", led_level);//imprimir ciclo ativo do PWM - valor máximo é 2000
         
-        pwm_set_gpio_level(PWM_LED, led_level); //define o nível atual do PWM (duty cycle)
+        pwm_set_gpio_level(LED, led_level); //define o nível atual do PWM (duty cycle)
 
         sleep_ms(1000); // Atraso de 1 segundo
 
         if (up_down) 
         {
             led_level += LED_STEP; // Incrementa o nível do LED
-            if (led_level >= WRAP_PERIOD)
+            if (led_level >= WRAP)
                 up_down = 0; // Muda direção para diminuir quando atingir o período máximo
         }
         else
