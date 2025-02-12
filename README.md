@@ -24,8 +24,15 @@ A simulação é realizada utilizando o simulador Wokwi, onde a posição do ser
   - O servomotor realiza movimentos suaves entre 0° e 180° com incrementos de 5µs no ciclo ativo e atraso de 10ms entre cada ajuste.
   
 - **Experimento com LED RGB**:
-  - Através do GPIO 12, é possível observar o comportamento da iluminação do LED RGB em relação ao controle PWM aplicado ao servomotor, quando o .
+  - Através do GPIO 12, é possível observar o comportamento da iluminação do LED RGB em relação ao controle PWM aplicado ao servomotor.
+  -  O comportamento do LED RGB:
+- Em 180°, o ciclo de trabalho do PWM foi ajustado para 2400 µs (12%), o que representa um duty cycle maior, resultando em uma intensidade maior de luz no LED, já que o período (T on) do PWM permanece por mais tempo durante cada ciclo.
+- Em 90°, o ciclo de trabalho foi de 1470 µs (7.35%), produzindo uma intensidade média de luz no LED.
+- Em 0°, o ciclo de trabalho foi de 500 µs (2.5%), resultando uma intensidade baixa de luz.
 
+- **Link do Vídeo de Explicação**
+
+  
 ## Configuração do Ambiente de Desenvolvimento
 
 ### Instalação
